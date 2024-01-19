@@ -10,6 +10,7 @@ public class Application {
     private int possibleSymbols;
     private Grade grade;
     Code code;
+    String userGuess;
 
     public Application() {
         turnCount = 1;
@@ -42,10 +43,10 @@ public class Application {
             System.out.print("Turn " + (turnCount) + ":\n> ");
 
             // Get user guess
-            String userCode = scanner.next();
+            getUserGuess();
 
             // Grade the user's guess using the Grade class
-            grade.grade(code.getCode(), userCode);
+            grade.grade(code.getCode(), userGuess);
 
             // Display the result
             System.out.println("Turn " + turnCount + ": " + grade.getGrade());
@@ -100,6 +101,21 @@ public class Application {
                     throw new NumberFormatException("Error: maximum number of possible symbols in the code is 36 (0-9, a-z).\n");
                 }
                 break; // If the input is valid, exit the loop
+            } catch (NumberFormatException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+    }
+
+    private void getUserGuess() {
+        while (true) {
+            try {
+                userGuess = scanner.next();
+                int length = userGuess.length();
+                if (length < codeLength || length > codeLength) {
+                    throw new NumberFormatException("The guess needs to be the same length as the secret code (" + codeLength + "), please try again: ");
+                }
+                break;
             } catch (NumberFormatException e) {
                 System.out.println(e.getMessage());
             }

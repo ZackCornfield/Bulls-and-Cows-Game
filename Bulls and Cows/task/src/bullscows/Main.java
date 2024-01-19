@@ -49,54 +49,58 @@ public class Main {
     }
 
     private static int getCodeLength() {
-        int length = 0;
-        String tempInput = null;
+        int length;
 
-        try {
+        while (true) {
+            try {
                 System.out.print("Please, enter the secret code's length: ");
-                tempInput = scanner.next();
+                String input = scanner.next();
 
-                if (!tempInput.matches("\\d+")) {
+                if (!input.matches("\\d+")) {
                     throw new NumberFormatException();
                 }
 
-                length = Integer.parseInt(tempInput);
+                length = Integer.parseInt(input);
 
                 if (length <= 0) {
                     throw new NumberFormatException();
                 }
-        } catch (NumberFormatException e) {
-            System.out.println("Error: \"" + tempInput + "\" isn't a valid number.");
-            System.exit(0);
+
+                break; // If the input is valid, exit the loop
+            } catch (NumberFormatException e) {
+                System.out.println("Error: \"" + scanner.next() + "\" isn't a valid number.");
+            }
         }
+
         return length;
     }
 
     private static int getNumPossibleSymbols(int length) {
         int numOfPossibleSymbols = 0;
 
-        try {
-            System.out.println("Input the number of possible symbols in the code: ");
-            String input = scanner.next();
+        while (true) {
+            try {
+                System.out.println("Input the number of possible symbols in the code: ");
+                String input = scanner.next();
 
-            if (!input.matches("\\d+")) {
-                throw new NumberFormatException("Error: \"" + input + "\" isn't a valid number.");
+                if (!input.matches("\\d+")) {
+                    throw new NumberFormatException();
+                }
+
+                numOfPossibleSymbols = Integer.parseInt(input);
+
+                if (numOfPossibleSymbols < length) {
+                    throw new NumberFormatException("Error: it's not possible to generate a code with a length of " + length + " with " + numOfPossibleSymbols + " unique symbols.");
+                }else if(numOfPossibleSymbols > 36) {
+                    throw new NumberFormatException("Error: maximum number of possible symbols in the code is 36 (0-9, a-z).\n");
+                }
+                break; // If the input is valid, exit the loop
+            } catch (NumberFormatException e) {
+                System.out.println(e.getMessage());
             }
-
-            numOfPossibleSymbols = Integer.parseInt(input);
-
-            if (numOfPossibleSymbols < length) {
-                throw new NumberFormatException("Error: it's not possible to generate a code with a length of " + length + " with " + numOfPossibleSymbols + " unique symbols.");
-            }else if(numOfPossibleSymbols > 36) {
-                throw new NumberFormatException("Error: maximum number of possible symbols in the code is 36 (0-9, a-z).\n");
-            }
-        } catch (NumberFormatException e) {
-            System.out.println(e.getMessage());
-            System.exit(0);
         }
         return numOfPossibleSymbols;
     }
-
 
     // Method to get the symbol range string for display
     private static String getSymbolRange(int possibleSymbols) {
